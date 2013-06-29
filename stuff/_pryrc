@@ -1,0 +1,26 @@
+begin
+  require 'awesome_print' 
+  Pry.config.print = proc { |output, value| output.puts value.ai }
+rescue LoadError => err
+  puts "No awesome_print :-("
+end
+
+Pry.config.editor = 'vim'
+Pry.config.pager  = true
+Pry.config.color  = true
+Pry.config.prompt = Pry::NAV_PROMPT
+Pry.config.editor = "vim"
+
+Pry.commands.alias_command 'c', 'continue'
+Pry.commands.alias_command 's', 'step'
+Pry.commands.alias_command 'n', 'next'
+Pry.commands.alias_command 'f', 'finish'
+
+Pry.config.commands.command "add", "Add a list of numbers together" do |*args|
+  output.puts "Result is: #{ args.map(&:to_i).inject(&:+) }"
+end
+
+def time(repetitions = 100, &block)
+  require 'benchmark'
+  Benchmark.bm{ |b| b.report{ repetitions.times(&block) } }
+end
